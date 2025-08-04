@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Scale, Gavel, Users } from 'lucide-react'
+import { Scale, Gavel, Users, Mail } from 'lucide-react'
 import { GavelButton } from '@/components/ui/gavel-button'
 import { CourtroomCard, CourtroomCardContent, CourtroomCardHeader, CourtroomCardTitle } from '@/components/ui/courtroom-card'
 import { useAuth } from '@/hooks/useAuth'
@@ -16,6 +16,7 @@ export function AuthPage({ onAuthenticated }: AuthPageProps) {
   const [fullName, setFullName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   
   const { signIn, signUp } = useAuth()
 
@@ -23,16 +24,30 @@ export function AuthPage({ onAuthenticated }: AuthPageProps) {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setSuccessMessage('')
 
     try {
       if (isLogin) {
         const { error } = await signIn(email, password)
         if (error) throw error
+        onAuthenticated()
       } else {
         const { error } = await signUp(email, password, fullName)
         if (error) throw error
+        
+        // Show success message for signup instead of redirecting
+        setSuccessMessage(
+          '🎉 Welcome to Strategic Trial Simulation! ' + 
+          'Check your email for a beautifully designed confirmation message from our team. ' +
+          'Once confirmed, you can start your legal career!'
+        )
+        
+        // Reset form
+        setEmail('')
+        setPassword('')
+        setFullName('')
+        setIsLogin(true) // Switch to login view
       }
-      onAuthenticated()
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -41,9 +56,20 @@ export function AuthPage({ onAuthenticated }: AuthPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gavel-blue via-gavel-blue-700 to-mahogany flex items-center justify-center p-4">
+    <div className="min-h-screen relative flex items-center justify-center p-4">
+      {/* Courtroom Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/courtroom-background.jpg)',
+        }}
+      />
+      
+      {/* Dark Overlay for Better Text Readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gavel-blue/80 via-gavel-blue-700/85 to-mahogany/80" />
+      
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-15">
         <div className="absolute top-20 left-20 animate-pulse-gentle">
           <Scale size={64} className="text-verdict-gold" />
         </div>
@@ -153,6 +179,19 @@ export function AuthPage({ onAuthenticated }: AuthPageProps) {
                   className="text-red-400 text-sm text-center bg-red-400/10 p-2 rounded"
                 >
                   {error}
+                </motion.div>
+              )}
+
+              {successMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-green-400 text-sm text-center bg-green-400/10 p-3 rounded border border-green-400/30"
+                >
+                  <div className="flex items-start gap-2">
+                    <Mail className="text-green-400 mt-0.5 flex-shrink-0" size={16} />
+                    <span>{successMessage}</span>
+                  </div>
                 </motion.div>
               )}
 

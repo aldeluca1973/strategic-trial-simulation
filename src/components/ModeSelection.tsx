@@ -99,8 +99,19 @@ export function ModeSelection({ onModeSelect }: ModeSelectionProps) {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gavel-blue via-gavel-blue-700 to-mahogany p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen relative p-4">
+      {/* Courtroom Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/courtroom-background.jpg)',
+        }}
+      />
+      
+      {/* Dark Overlay for Better Text Readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gavel-blue/80 via-gavel-blue-700/85 to-mahogany/80" />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
