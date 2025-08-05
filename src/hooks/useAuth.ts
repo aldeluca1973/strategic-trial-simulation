@@ -213,56 +213,18 @@ export function useAuth() {
 
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
-      // Create user with email confirmation disabled for now
+      // Create user with basic signup
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             full_name: fullName
-          },
-          emailRedirectTo: `${window.location.origin}/auth/confirm`
+          }
         }
       })
 
-      if (error) return { error }
-
-      // Send our custom branded welcome email
-      if (data.user) {
-        try {
-          // Get the confirmation token from our database
-          const { data: tokenData } = await supabase
-            .from('email_confirmations')
-            .select('confirmation_token')
-            .eq('user_id', data.user.id)
-            .eq('email_type', 'signup')
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single()
-
-          if (tokenData) {
-            const confirmationUrl = `${window.location.origin}/auth/confirm?token=${tokenData.confirmation_token}`
-            
-            // Send custom branded email
-            await fetch(`${window.location.origin}/functions/v1/custom-email-service`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: email,
-                type: 'welcome',
-                confirmationUrl: confirmationUrl
-              }),
-            })
-          }
-        } catch (emailError) {
-          console.log('Custom email sending failed, but account was created:', emailError)
-          // Don't fail the signup if email fails
-        }
-      }
-
-      return { error: null }
+      return { data, error }
     } catch (signupError) {
       return { error: signupError }
     }
