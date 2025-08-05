@@ -7,6 +7,8 @@ import { useGameStore } from '@/stores/gameStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useWebRTC } from '@/hooks/useWebRTC'
 import { supabase } from '@/lib/supabase'
+import { TrialFlowTracker } from './TrialFlowTracker'
+import { WitnessExamination } from './WitnessExamination'
 
 interface CourtroomProps {
   onGameEnd: () => void
@@ -41,6 +43,8 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
   const [isSubmittingArgument, setIsSubmittingArgument] = useState(false)
   const [juryDeliberating, setJuryDeliberating] = useState(false)
   const [verdict, setVerdict] = useState<any>(null)
+  const [objectionHistory, setObjectionHistory] = useState<any[]>([])
+  const [phaseInstructions, setPhaseInstructions] = useState<string>('')
 
   // Initialize WebRTC when entering courtroom
   useEffect(() => {
@@ -272,6 +276,34 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
     }
   }
 
+  const handleObjection = (objectionType: string, context: string) => {
+    const objection = {
+      type: objectionType,
+      context,
+      objectedBy: userRole,
+      timestamp: new Date().toISOString()
+    }
+    
+    setObjectionHistory(prev => [...prev, objection])
+    
+    addNotification({
+      type: 'info',
+      message: `Objection made: ${objectionType}`
+    })
+  }
+
+  const handleWitnessQuestion = (witnessId: string, question: string) => {
+    addNotification({
+      type: 'info',
+      message: 'Question asked to witness'
+    })
+  }
+
+  const handlePhaseInfo = (phase: string) => {
+    // Handle phase information requests
+    setPhaseInstructions(`Information about ${phase} phase`)
+  }
+
 
 
   const formatTime = (seconds: number) => {
@@ -452,6 +484,24 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
       </div>
 
       <div className="max-w-7xl mx-auto p-4">
+        {/* Trial Flow Tracker */}
+        <TrialFlowTracker 
+          currentPhase={currentPhase}
+          onPhaseInfo={handlePhaseInfo}
+          timeRemaining={timeRemaining}
+        />
+
+        {/* Witness Examination (only visible during witness examination phase) */}
+        {currentPhase === 'witness_examination' && (
+          <WitnessExamination
+            caseData={selectedCase}
+            userRole={userRole}
+            onObjection={handleObjection}
+            onQuestionAsked={handleWitnessQuestion}
+            currentPhase={currentPhase}
+          />
+        )}
+
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Main Content Area */}
           <div className="lg:col-span-3 space-y-6">

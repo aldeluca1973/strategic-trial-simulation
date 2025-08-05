@@ -15,6 +15,35 @@
         "testimony": "The main witnesses were the two parties to the contract, Lucy and Zehmer. Zehmer's wife also testified that she did not believe the contract was serious."
       }
     ],
+    "witnesses": [
+      {
+        "id": "lucy",
+        "name": "W.O. Lucy",
+        "role": "Plaintiff",
+        "background": "Farmer who believed he was making a serious land purchase",
+        "key_facts": ["Wanted to buy Zehmer's farm", "Paid money and received signed agreement", "Believed deal was serious"],
+        "credibility": 80,
+        "bias": "Has financial interest in enforcing the contract"
+      },
+      {
+        "id": "zehmer",
+        "name": "A.H. Zehmer",
+        "role": "Defendant",
+        "background": "Land owner who claims he was joking",
+        "key_facts": ["Signed agreement while drinking", "Claims it was a joke", "Owns the disputed farm"],
+        "credibility": 60,
+        "bias": "Doesn't want to sell his farm"
+      },
+      {
+        "id": "mrs_zehmer",
+        "name": "Mrs. Zehmer",
+        "role": "Witness",
+        "background": "Zehmer's wife who was present during the incident",
+        "key_facts": ["Was present during signing", "Believed it was a joke", "Also signed the agreement"],
+        "credibility": 70,
+        "bias": "Supports her husband's position"
+      }
+    ],
     "legal_arguments": {
       "general": "The main legal argument was whether a contract can be enforced if one of the parties was joking. The court held that the objective actions of the parties are what matter, not their subjective intentions."
     },
@@ -41,6 +70,35 @@
     "witness_testimonies": [
       {
         "testimony": "The main witnesses were the plaintiff, John Leonard, and representatives from PepsiCo."
+      }
+    ],
+    "witnesses": [
+      {
+        "id": "leonard",
+        "name": "John Leonard",
+        "role": "Plaintiff",
+        "background": "College student who collected Pepsi points",
+        "key_facts": ["Collected 7 million Pepsi points", "Attempted to claim Harrier jet", "Believed commercial was serious offer"],
+        "credibility": 75,
+        "bias": "Wants to win the case and get the jet"
+      },
+      {
+        "id": "pepsi_exec",
+        "name": "PepsiCo Executive",
+        "role": "Corporate Representative",
+        "background": "Marketing executive involved in the campaign",
+        "key_facts": ["Designed promotional campaign", "Never intended to sell actual jets", "Commercial was meant as humor"],
+        "credibility": 85,
+        "bias": "Represents corporate interests"
+      },
+      {
+        "id": "marketing_expert",
+        "name": "Dr. Sarah Mitchell",
+        "role": "Marketing Expert",
+        "background": "Professor of advertising law and marketing practices",
+        "key_facts": ["Expert in advertising standards", "Can explain industry practices", "Objective third party"],
+        "credibility": 95,
+        "bias": "None - expert witness"
       }
     ],
     "legal_arguments": {
