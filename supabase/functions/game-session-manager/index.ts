@@ -24,7 +24,8 @@ Deno.serve(async (req) => {
     const headers = {
       'Authorization': `Bearer ${serviceKey}`,
       'Content-Type': 'application/json',
-      'apikey': serviceKey
+      'apikey': serviceKey,
+      'Prefer': 'return=representation'
     };
 
     if (action === 'create_game') {
@@ -32,12 +33,13 @@ Deno.serve(async (req) => {
       const roomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
       
       // Create game session
-      const gameResponse = await fetch(`${apiUrl}/game_sessions`, {
+      const gameResponse = await fetch(`${apiUrl}/game_sessions?select=*`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
           room_code: roomCode,
           host_user_id: userId,
+          case_id: data.selectedCaseId,
           current_phase: 'lobby',
           max_players: data.maxPlayers || 3,
           is_active: true,
@@ -55,8 +57,17 @@ Deno.serve(async (req) => {
         throw new Error(`Failed to create game: ${error}`);
       }
       
-      const gameSession = await gameResponse.json();
-      const newGame = gameSession[0];
+      const responseText = await gameResponse.text();
+      console.log('Game creation response:', responseText);
+      
+      let gameSession;
+      try {
+        gameSession = JSON.parse(responseText);
+      } catch (parseError) {
+        throw new Error(`Failed to parse response: ${responseText}`);
+      }
+      
+      const newGame = Array.isArray(gameSession) ? gameSession[0] : gameSession;
       
       // Add host as participant
       await fetch(`${apiUrl}/game_participants`, {
