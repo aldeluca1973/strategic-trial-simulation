@@ -102,118 +102,42 @@ export function CareerProgression({ onClose, onStartCase, onViewTraining }: Care
     try {
       // Load player profile with career data
       const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
+        .from('player_profiles')
         .select('*')
         .eq('id', user.id)
         .single()
       
-      // Create default profile if none exists or error
-      let finalProfileData = profileData
-      if (profileError || !profileData) {
-        finalProfileData = {
-          id: user.id,
-          full_name: user.email?.split('@')[0] || 'Anonymous Attorney',
-          career_rank: 1,
-          experience_points: 0,
-          total_cases_won: 0,
-          total_cases_played: 0,
-          current_level_xp: 0,
-          next_level_xp: 1000,
-          career_start_date: new Date().toISOString(),
-          reputation_score: 50
-        }
-      }
+      if (profileError) throw profileError
 
       // Load available cases based on player rank
       const { data: casesData, error: casesError } = await supabase
-        .from('legal_cases')
+        .from('cases')
         .select('*')
-        .order('id')
-        .limit(10)
+        .lte('required_rank', profileData?.career_rank || 1)
+        .order('difficulty_level')
       
-      // Create default cases if error or no data
-      let finalCasesData = casesData || []
-      if (casesError || !casesData?.length) {
-        finalCasesData = [
-          {
-            id: 1,
-            title: "The People vs. Smith",
-            description: "A criminal case involving theft allegations",
-            difficulty_level: 1,
-            required_rank: 1,
-            experience_reward: 100,
-            case_type: "criminal",
-            estimated_duration_minutes: 30,
-            is_unlocked: true,
-            is_completed: false
-          },
-          {
-            id: 2,
-            title: "Johnson vs. Corporation Inc.",
-            description: "A civil case involving contract disputes",
-            difficulty_level: 2,
-            required_rank: 3,
-            experience_reward: 200,
-            case_type: "civil",
-            estimated_duration_minutes: 45,
-            is_unlocked: false,
-            is_completed: false
-          }
-        ]
-      }
+      if (casesError) throw casesError
 
       // Load achievements
-      const { data: achievementsData } = await supabase
+      const { data: achievementsData, error: achievementsError } = await supabase
         .from('player_achievements')
         .select('*')
         .eq('player_id', user.id)
       
-      // Create default achievements if no data
-      const finalAchievementsData = achievementsData || [
-        {
-          id: 1,
-          title: "First Case",
-          description: "Complete your first trial",
-          category: "beginner",
-          progress_current: 0,
-          progress_target: 1,
-          is_unlocked: false
-        },
-        {
-          id: 2,
-          title: "Winning Streak",
-          description: "Win 5 cases in a row",
-          category: "performance",
-          progress_current: 0,
-          progress_target: 5,
-          is_unlocked: false
-        }
-      ]
+      if (achievementsError) throw achievementsError
 
       // Load premium bundles
-      const { data: bundlesData } = await supabase
-        .from('content_bundles')
+      const { data: bundlesData, error: bundlesError } = await supabase
+        .from('premium_content_bundles')
         .select('*')
-        .limit(5)
+        .eq('is_active', true)
       
-      // Create default bundles if no data
-      const finalBundlesData = bundlesData || [
-        {
-          id: "premium1",
-          name: "Criminal Defense Master Pack",
-          description: "Advanced criminal cases with complex evidence",
-          price: 9.99,
-          currency: "USD",
-          case_count: 10,
-          preview_cases: ["Murder Mystery", "White Collar Crime", "Drug Case"],
-          is_purchased: false
-        }
-      ]
+      if (bundlesError) throw bundlesError
 
-      setProfile(finalProfileData)
-      setAvailableCases(finalCasesData)
-      setAchievements(finalAchievementsData)
-      setPremiumBundles(finalBundlesData)
+      setProfile(profileData)
+      setAvailableCases(casesData || [])
+      setAchievements(achievementsData || [])
+      setPremiumBundles(bundlesData || [])
     } catch (error) {
       console.error('Error loading career data:', error)
     } finally {

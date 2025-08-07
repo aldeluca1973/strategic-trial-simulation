@@ -7,11 +7,6 @@ import { useGameStore } from '@/stores/gameStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useWebRTC } from '@/hooks/useWebRTC'
 import { supabase } from '@/lib/supabase'
-import { TrialFlowTracker } from './TrialFlowTracker'
-import { WitnessExamination } from './WitnessExamination'
-import GameHUD from './GameHUD'
-import InstantFeedback from './InstantFeedback'
-import PowerUpManager, { PowerUp } from './PowerUpManager'
 
 interface CourtroomProps {
   onGameEnd: () => void
@@ -46,18 +41,6 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
   const [isSubmittingArgument, setIsSubmittingArgument] = useState(false)
   const [juryDeliberating, setJuryDeliberating] = useState(false)
   const [verdict, setVerdict] = useState<any>(null)
-  const [objectionHistory, setObjectionHistory] = useState<any[]>([])
-  const [phaseInstructions, setPhaseInstructions] = useState<string>('')
-
-  // 🎮 GAMIFICATION STATE
-  const [currentScore, setCurrentScore] = useState(0)
-  const [comboMultiplier, setComboMultiplier] = useState(1.0)
-  const [powerUpCharge, setPowerUpCharge] = useState(0)
-  const [activePowerUps, setActivePowerUps] = useState<PowerUp[]>([])
-  const [availablePowerUps, setAvailablePowerUps] = useState<PowerUp[]>([])
-  const [recentEvents, setRecentEvents] = useState<Array<{type: string; points: number; timestamp: number}>>([])
-  const [feedbackEvents, setFeedbackEvents] = useState<Array<any>>([])
-  const [gameSessionId] = useState(() => crypto.randomUUID())
 
   // Initialize WebRTC when entering courtroom
   useEffect(() => {
@@ -289,169 +272,6 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
     }
   }
 
-  const handleObjection = (objectionType: string, context: string) => {
-    const objection = {
-      type: objectionType,
-      context,
-      objectedBy: userRole,
-      timestamp: new Date().toISOString()
-    }
-    
-    setObjectionHistory(prev => [...prev, objection])
-    
-    addNotification({
-      type: 'info',
-      message: `Objection made: ${objectionType}`
-    })
-  }
-
-  const handleWitnessQuestion = (witnessId: string, question: string) => {
-    addNotification({
-      type: 'info',
-      message: 'Question asked to witness'
-    })
-  }
-
-  const handlePhaseInfo = (phase: string) => {
-    // Handle phase information requests
-    setPhaseInstructions(`Information about ${phase} phase`)
-  }
-
-  // 🎮 GAMIFICATION FUNCTIONS
-  const triggerGameEvent = useCallback(async (eventType: string, eventData: any = {}) => {
-    if (!user || !currentGame) return
-
-    try {
-      const response = await supabase.functions.invoke('game-event-processor', {
-        body: {
-          event_type: eventType,
-          event_data: eventData,
-          user_id: user.id,
-          session_id: gameSessionId
-        }
-      })
-
-      if (response.data && !response.error) {
-        const { points_awarded, combo_multiplier, new_achievements, powerups_awarded, total_score } = response.data
-
-        // Update score and combo
-        setCurrentScore(total_score)
-        setComboMultiplier(combo_multiplier)
-
-        // Add to recent events for UI display
-        setRecentEvents(prev => [...prev.slice(-9), {
-          type: eventType,
-          points: points_awarded,
-          timestamp: Date.now()
-        }])
-
-        // Update power-up charge
-        setPowerUpCharge(prev => Math.min(100, prev + (points_awarded / 10)))
-
-        // Show feedback for the event
-        addFeedbackEvent({
-          id: crypto.randomUUID(),
-          type: points_awarded > 0 ? 'success' : 'failure',
-          subtype: eventType,
-          message: getEventMessage(eventType, points_awarded),
-          intensity: getEventIntensity(points_awarded, combo_multiplier)
-        })
-
-        // Handle achievements
-        if (new_achievements?.length > 0) {
-          new_achievements.forEach((achievement: string) => {
-            addFeedbackEvent({
-              id: crypto.randomUUID(),
-              type: 'achievement',
-              subtype: 'achievement_unlocked',
-              message: `Achievement Unlocked: ${achievement}!`,
-              intensity: 'extreme'
-            })
-          })
-        }
-
-        // Handle powerup rewards
-        if (powerups_awarded?.length > 0) {
-          powerups_awarded.forEach((powerup: string) => {
-            addFeedbackEvent({
-              id: crypto.randomUUID(),
-              type: 'powerup',
-              subtype: 'powerup_activated',
-              message: `Power-up Earned: ${powerup}!`,
-              intensity: 'high'
-            })
-          })
-        }
-      }
-    } catch (error) {
-      console.error('Error triggering game event:', error)
-    }
-  }, [user, currentGame, gameSessionId])
-
-  const addFeedbackEvent = (event: any) => {
-    setFeedbackEvents(prev => [...prev, event])
-  }
-
-  const getEventMessage = (eventType: string, points: number): string => {
-    const messages = {
-      'successful_objection': 'OBJECTION SUSTAINED!',
-      'sustained_objection': 'EXCELLENT OBJECTION!',
-      'evidence_presented': 'EVIDENCE ACCEPTED!',
-      'witness_questioned': 'GREAT QUESTIONING!',
-      'strong_argument': 'COMPELLING ARGUMENT!',
-      'dramatic_moment': 'DRAMATIC MOMENT!',
-      'perfect_opening': 'PERFECT OPENING!',
-      'objection_overruled': 'OBJECTION OVERRULED'
-    }
-    return messages[eventType as keyof typeof messages] || `+${points} POINTS!`
-  }
-
-  const getEventIntensity = (points: number, combo: number): 'low' | 'medium' | 'high' | 'extreme' => {
-    if (combo >= 2.5 || points >= 400) return 'extreme'
-    if (combo >= 2.0 || points >= 250) return 'high' 
-    if (combo >= 1.5 || points >= 150) return 'medium'
-    return 'low'
-  }
-
-  const handlePowerUpActivation = (powerUpId: string) => {
-    // Logic to activate power-up
-    triggerGameEvent('powerup_activated', { powerup_id: powerUpId })
-    setPowerUpCharge(0) // Reset charge after use
-  }
-
-  const handleFeedbackEventComplete = (eventId: string) => {
-    setFeedbackEvents(prev => prev.filter(e => e.id !== eventId))
-  }
-
-  // Enhanced action handlers with gamification
-  const handleEnhancedObjection = (objectionType: string, context: string = '') => {
-    handleObjection(objectionType, context)
-    triggerGameEvent('successful_objection', { objection_type: objectionType })
-  }
-
-  const handleEnhancedEvidencePresentation = (evidence: any) => {
-    presentEvidence(evidence)
-    triggerGameEvent('evidence_presented', { evidence_complexity: evidence.complexity || 1 })
-  }
-
-  const handleEnhancedArgumentSubmission = async () => {
-    if (!currentArgument.trim()) return
-    
-    setIsSubmittingArgument(true)
-    await submitArgument()
-    
-    // Determine argument quality for scoring
-    const argumentLength = currentArgument.length
-    const argumentQuality = argumentLength > 200 ? 'strong_argument' : 'evidence_presented'
-    
-    triggerGameEvent(argumentQuality, { 
-      argument_length: argumentLength,
-      phase: currentPhase 
-    })
-    
-    setIsSubmittingArgument(false)
-  }
-
 
 
   const formatTime = (seconds: number) => {
@@ -589,29 +409,6 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gavel-blue via-gavel-blue-700 to-mahogany">
-      {/* 🎮 GAMIFICATION OVERLAY */}
-      <GameHUD
-        currentScore={currentScore}
-        comboMultiplier={comboMultiplier}
-        powerUpCharge={powerUpCharge}
-        activePowerUps={activePowerUps}
-        recentEvents={recentEvents}
-        onActivatePowerUp={handlePowerUpActivation}
-      />
-      
-      <InstantFeedback
-        events={feedbackEvents}
-        onEventComplete={handleFeedbackEventComplete}
-      />
-      
-      <PowerUpManager
-        activePowerUps={activePowerUps}
-        availablePowerUps={availablePowerUps}
-        onActivatePowerUp={handlePowerUpActivation}
-        onPowerUpExpired={(id) => setActivePowerUps(prev => prev.filter(p => p.id !== id))}
-        gamePhase={currentPhase}
-        canUsePowerUps={true}
-      />
       {/* Header */}
       <div className="border-b border-verdict-gold/20 bg-gavel-blue/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -655,24 +452,6 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
       </div>
 
       <div className="max-w-7xl mx-auto p-4">
-        {/* Trial Flow Tracker */}
-        <TrialFlowTracker 
-          currentPhase={currentPhase}
-          onPhaseInfo={handlePhaseInfo}
-          timeRemaining={timeRemaining}
-        />
-
-        {/* Witness Examination (only visible during witness examination phase) */}
-        {currentPhase === 'witness_examination' && (
-          <WitnessExamination
-            caseData={selectedCase}
-            userRole={userRole}
-            onObjection={handleEnhancedObjection}
-            onQuestionAsked={handleWitnessQuestion}
-            currentPhase={currentPhase}
-          />
-        )}
-
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Main Content Area */}
           <div className="lg:col-span-3 space-y-6">
@@ -703,7 +482,7 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
                     <div className="flex gap-3">
                       <GavelButton
                         variant="accent"
-                        onClick={handleEnhancedArgumentSubmission}
+                        onClick={submitArgument}
                         disabled={!currentArgument.trim() || isSubmittingArgument}
                         className="flex-1"
                       >
@@ -783,7 +562,7 @@ export function Courtroom({ onGameEnd }: CourtroomProps) {
                             key={index}
                             whileHover={{ scale: 1.02 }}
                             className="p-3 bg-gavel-blue/30 rounded-lg cursor-pointer"
-                            onClick={() => handleEnhancedEvidencePresentation(evidence)}
+                            onClick={() => presentEvidence(evidence)}
                           >
                             <h5 className="font-medium text-verdict-gold text-sm mb-1">
                               {evidence.evidence_name || `Evidence ${index + 1}`}

@@ -1,12 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Scale, Gavel, Heart, Clock, Trophy, Star, GraduationCap, Crown, ShoppingCart, Book, Play } from 'lucide-react'
+import { Scale, Gavel, Heart, Clock, Trophy, Star, GraduationCap, Crown, ShoppingCart } from 'lucide-react'
 import { GavelButton } from '@/components/ui/gavel-button'
 import { CourtroomCard, CourtroomCardContent, CourtroomCardHeader, CourtroomCardTitle } from '@/components/ui/courtroom-card'
 import { PremiumCasesModal } from '@/components/premium'
-import { HowToPlayGuide } from '@/components/tutorial/HowToPlayGuide'
-import { MobilePageWrapper, MobileGameModes } from '@/components/mobile'
-import { useIsMobile } from '@/hooks/use-mobile'
 
 export type GameMode = 'training' | 'career' | 'junior' | 'standard' | 'master'
 
@@ -17,17 +14,6 @@ interface ModeSelectionProps {
 export function ModeSelection({ onModeSelect }: ModeSelectionProps) {
   const [selectedMode, setSelectedMode] = useState<GameMode | null>(null)
   const [showPremiumModal, setShowPremiumModal] = useState(false)
-  const [showHowToPlay, setShowHowToPlay] = useState(false)
-  const isMobile = useIsMobile()
-  
-  // Mobile-first mode selection handler
-  const handleModeSelect = (mode: string) => {
-    setSelectedMode(mode as GameMode)
-    // Add small delay for visual feedback
-    setTimeout(() => {
-      onModeSelect(mode as GameMode)
-    }, 150)
-  }
 
   const modes = [
     {
@@ -80,8 +66,8 @@ export function ModeSelection({ onModeSelect }: ModeSelectionProps) {
     },
     {
       id: 'standard' as GameMode,
-      title: '⚖️ Virtual Courtroom',
-      subtitle: 'Teen/Adult • 5-60 minutes',
+      title: '⚖️ Strategic Trial Simulation',
+      subtitle: 'Teen/Adult • 15-30 minutes',
       description: 'Master legal strategy through realistic courtroom scenarios with consequence-driven gameplay.',
       features: [
         '🎯 Strategic evidence presentation',
@@ -112,57 +98,9 @@ export function ModeSelection({ onModeSelect }: ModeSelectionProps) {
     }
   ]
 
-  // Mobile-first return with conditional rendering
-  if (isMobile) {
-    return (
-      <MobilePageWrapper
-        headerProps={{
-          title: "Virtual Gavel",
-          subtitle: "Choose your game mode"
-        }}
-        showBottomNav={false}
-        className="bg-gradient-to-br from-gavel-blue via-gavel-blue-700 to-mahogany"
-      >
-        <MobileGameModes 
-          onSelectMode={handleModeSelect}
-          selectedMode={selectedMode || undefined}
-        />
-        
-        {/* How to Play Modal */}
-        {showHowToPlay && (
-          <HowToPlayGuide 
-            isVisible={showHowToPlay}
-            onClose={() => setShowHowToPlay(false)}
-          />
-        )}
-        
-        {/* Premium Modal */}
-        {showPremiumModal && (
-          <PremiumCasesModal 
-            isOpen={showPremiumModal}
-            onClose={() => setShowPremiumModal(false)}
-            onPurchase={(bundleId) => console.log('Purchase bundle:', bundleId)}
-          />
-        )}
-      </MobilePageWrapper>
-    )
-  }
-  
-  // Desktop version - keep existing design
   return (
-    <div className="min-h-screen relative p-4">
-      {/* Courtroom Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/courtroom-background.jpg)',
-        }}
-      />
-      
-      {/* Dark Overlay for Better Text Readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gavel-blue/80 via-gavel-blue-700/85 to-mahogany/80" />
-      
-      <div className="max-w-7xl mx-auto relative z-10">
+    <div className="min-h-screen bg-gradient-to-br from-gavel-blue via-gavel-blue-700 to-mahogany p-4">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -172,41 +110,14 @@ export function ModeSelection({ onModeSelect }: ModeSelectionProps) {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Gavel size={48} className="text-verdict-gold" />
             <h1 className="text-4xl font-serif font-bold text-parchment">
-              Virtual Courtroom Platform
+              Legal Education Platform
             </h1>
             <Gavel size={48} className="text-verdict-gold" />
           </div>
-          <p className="text-xl text-parchment/80 max-w-3xl mx-auto mb-6">
+          <p className="text-xl text-parchment/80 max-w-3xl mx-auto">
             Choose your legal education experience - from learning about fairness as a child 
             to mastering advanced trial strategy as a professional.
           </p>
-          
-          {/* CRITICAL: How to Play Button */}
-          <div className="flex justify-center gap-4 mb-4">
-            <GavelButton
-              variant="accent"
-              onClick={() => setShowHowToPlay(true)}
-              className="flex items-center gap-2 px-6 py-3"
-            >
-              <Book size={20} />
-              How to Play
-            </GavelButton>
-            <GavelButton
-              variant="secondary"
-              onClick={() => {
-                // Start with tutorial mode that leads to standard courtroom
-                setShowHowToPlay(true)
-              }}
-              className="flex items-center gap-2 px-6 py-3"
-            >
-              <Play size={20} />
-              Quick Start Tutorial
-            </GavelButton>
-          </div>
-          
-          <div className="text-sm text-parchment/60">
-            🎆 New? Start with "How to Play" to learn the rules!
-          </div>
         </motion.div>
 
         {/* Mode Cards */}
@@ -230,9 +141,10 @@ export function ModeSelection({ onModeSelect }: ModeSelectionProps) {
                   onClick={() => {
                     console.log('Mode card clicked:', mode.id)
                     setSelectedMode(mode.id)
-                    // Auto-start mode immediately for better UX
-                    console.log('Auto-starting mode:', mode.id)
-                    onModeSelect(mode.id)
+                    // Add visual feedback then navigate
+                    setTimeout(() => {
+                      onModeSelect(mode.id)
+                    }, 300)
                   }}
                 >
                   <CourtroomCardHeader>
@@ -391,17 +303,6 @@ export function ModeSelection({ onModeSelect }: ModeSelectionProps) {
           </CourtroomCard>
         </motion.div>
       </div>
-      
-      {/* How to Play Guide */}
-      <HowToPlayGuide
-        isVisible={showHowToPlay}
-        onClose={() => setShowHowToPlay(false)}
-        startTutorial={() => {
-          setShowHowToPlay(false)
-          // Start with standard mode for tutorial
-          onModeSelect('standard')
-        }}
-      />
       
       {/* Premium Cases Modal */}
       <PremiumCasesModal 

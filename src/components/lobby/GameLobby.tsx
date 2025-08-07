@@ -3,27 +3,20 @@ import { motion } from 'framer-motion'
 import { Plus, Users, Smartphone, Bluetooth, Copy, Settings, LogOut, User, Trophy } from 'lucide-react'
 import { GavelButton } from '@/components/ui/gavel-button'
 import { CourtroomCard, CourtroomCardContent, CourtroomCardHeader, CourtroomCardTitle } from '@/components/ui/courtroom-card'
-import { EnhancedRoleSelector } from './EnhancedRoleSelector'
+import { RoleSelector } from './RoleSelector'
 import { CaseStatistics } from './CaseStatistics'
 import { PlayerDashboard } from '@/components/profile/PlayerDashboard'
 import { useGameSession } from '@/hooks/useGameSession'
 import { useAuth } from '@/hooks/useAuth'
 import { useBluetooth } from '@/hooks/useBluetooth'
 import { useGameStore } from '@/stores/gameStore'
-import { LegalCase } from '@/lib/supabase'
 
 interface GameLobbyProps {
   onStartGame: () => void
   onBackToModeSelection?: () => void
-  preSelectedCase?: LegalCase | null
-  gameSettings?: {
-    playerMode: string
-    timeLimit: number
-    allowRandom: boolean
-  } | null
 }
 
-export function GameLobby({ onStartGame, onBackToModeSelection, preSelectedCase, gameSettings }: GameLobbyProps) {
+export function GameLobby({ onStartGame, onBackToModeSelection }: GameLobbyProps) {
   const [showCreateGame, setShowCreateGame] = useState(false)
   const [showJoinGame, setShowJoinGame] = useState(false)
   const [showPlayerDashboard, setShowPlayerDashboard] = useState(false)
@@ -53,11 +46,9 @@ export function GameLobby({ onStartGame, onBackToModeSelection, preSelectedCase,
 
   const handleCreateGame = async () => {
     const game = await createGame({ 
-      maxPlayers: gameSettings?.playerMode === 'solo' ? 1 : gameSettings?.playerMode === '2player' ? 2 : maxPlayers, 
-      timeLimit: gameSettings?.timeLimit || timeLimit, 
-      preferredRole: selectedRole,
-      preSelectedCase: preSelectedCase,
-      selectedCaseId: preSelectedCase?.id
+      maxPlayers, 
+      timeLimit, 
+      preferredRole: selectedRole 
     })
     if (game) {
       setShowCreateGame(false)
@@ -288,7 +279,7 @@ export function GameLobby({ onStartGame, onBackToModeSelection, preSelectedCase,
           className="text-center mb-8"
         >
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-verdict-gold mb-2">
-            Virtual Courtroom
+            The Virtual Gavel
           </h1>
           <p className="text-parchment/80 text-lg">
             Welcome back, {user?.user_metadata?.full_name || user?.email}!
@@ -397,7 +388,7 @@ export function GameLobby({ onStartGame, onBackToModeSelection, preSelectedCase,
                 <div className="space-y-6">
                   {/* Role Selection */}
                   <div>
-                    <EnhancedRoleSelector
+                    <RoleSelector
                       selectedRole={selectedRole}
                       onRoleSelect={setSelectedRole}
                       userPreferences={{
@@ -405,7 +396,6 @@ export function GameLobby({ onStartGame, onBackToModeSelection, preSelectedCase,
                         preferred_role_2: user?.user_metadata?.preferred_role_2,
                         preferred_role_3: user?.user_metadata?.preferred_role_3
                       }}
-                      gameMode={maxPlayers === 1 ? 'solo' : 'multiplayer'}
                     />
                   </div>
                   

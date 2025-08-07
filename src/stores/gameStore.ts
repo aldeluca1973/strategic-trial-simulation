@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
 import { GameSession, GameParticipant, LegalCase, Profile } from '@/lib/supabase'
 
 // Game Mode Types
@@ -45,19 +44,10 @@ interface GameState {
   currentView: 'auth' | 'mode-selection' | 'lobby' | 'game' | 'profile'
   selectedGameMode: GameMode | null
   
-  // Session persistence
-  lastActiveTime: number
-  hasHydrated: boolean
-  
   // Actions for app navigation
   setCurrentView: (view: GameState['currentView']) => void
   setSelectedGameMode: (mode: GameMode | null) => void
   clearGame: () => void
-  
-  // Session management
-  updateLastActiveTime: () => void
-  setHasHydrated: (hydrated: boolean) => void
-  resetToAuth: () => void
   
   // Game flow state
   currentPhase: GameSession['current_phase']
@@ -129,34 +119,18 @@ const initialState = {
   showEvidence: true,
   activeModal: null,
   notifications: [],
-  lastActiveTime: Date.now(),
-  hasHydrated: false,
 }
 
-export const useGameStore = create<GameState>()(
-  persist(
-    (set, get) => ({
-      ...initialState,
-      
-      setCurrentGame: (game) => {
-        set({ currentGame: game })
-        get().updateLastActiveTime()
-      },
-      setParticipants: (participants) => set({ participants }),
-      setSelectedCase: (selectedCase) => {
-        set({ selectedCase })
-        get().updateLastActiveTime()
-      },
-      setCurrentUser: (currentUser) => set({ currentUser }),
-      setUserRole: (userRole) => set({ userRole }),
-      setCurrentView: (currentView) => {
-        set({ currentView })
-        get().updateLastActiveTime()
-      },
-      setSelectedGameMode: (selectedGameMode) => {
-        set({ selectedGameMode })
-        get().updateLastActiveTime()
-      },
+export const useGameStore = create<GameState>((set, get) => ({
+  ...initialState,
+  
+  setCurrentGame: (game) => set({ currentGame: game }),
+  setParticipants: (participants) => set({ participants }),
+  setSelectedCase: (selectedCase) => set({ selectedCase }),
+  setCurrentUser: (currentUser) => set({ currentUser }),
+  setUserRole: (userRole) => set({ userRole }),
+  setCurrentView: (currentView) => set({ currentView }),
+  setSelectedGameMode: (selectedGameMode) => set({ selectedGameMode }),
   setCurrentPhase: (currentPhase) => set({ currentPhase }),
   setTimeRemaining: (timeRemaining) => set({ timeRemaining }),
   setIsConnected: (isConnected) => set({ isConnected }),
@@ -229,54 +203,5 @@ export const useGameStore = create<GameState>()(
     }))
   },
   
-  // Session management actions
-  updateLastActiveTime: () => set({ lastActiveTime: Date.now() }),
-  setHasHydrated: (hasHydrated) => set({ hasHydrated }),
-  resetToAuth: () => set({
-    currentView: 'auth',
-    selectedGameMode: null,
-    currentGame: null,
-    selectedCase: null,
-    userRole: null,
-    participants: [],
-    playerArguments: {},
-    presentedEvidence: [],
-    activeModal: null,
-    notifications: [],
-  }),
-  
   reset: () => set(initialState),
-    }),
-    {
-      name: 'strategic-trial-game-state',
-      // Only persist navigation state for quick restoration
-      partialize: (state) => ({
-        selectedGameMode: state.selectedGameMode,
-        currentView: state.currentView,
-        lastActiveTime: state.lastActiveTime,
-      }),
-      // Handle state hydration and expiration
-      onRehydrateStorage: () => (state, error) => {
-        if (error) {
-          console.log('Failed to hydrate game state:', error)
-          return
-        }
-        
-        if (state) {
-          // Check if state is expired (older than 24 hours)
-          const now = Date.now()
-          const timeDiff = now - (state.lastActiveTime || 0)
-          const maxAge = 24 * 60 * 60 * 1000 // 24 hours
-          
-          if (timeDiff > maxAge) {
-            console.log('Game state expired, resetting to auth...')
-            state.resetToAuth()
-          }
-          
-          state.setHasHydrated(true)
-          console.log('Game state hydrated successfully')
-        }
-      },
-    }
-  )
-)
+}))

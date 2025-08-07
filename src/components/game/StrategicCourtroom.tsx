@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Scale, Brain, Target, Shield, AlertTriangle, Clock, Gavel, MessageSquare, FileText, Users } from 'lucide-react'
 import { GavelButton } from '@/components/ui/gavel-button'
@@ -9,9 +9,6 @@ import { CaseStrengthAnalyzer } from './strategy/CaseStrengthAnalyzer'
 import { StrategicDecisionAdvisor } from './strategy/StrategicDecisionAdvisor'
 import { EvidenceCard } from './evidence/EvidenceCard'
 import { WitnessExamination } from './witness/WitnessExamination'
-import { QuitButton } from './QuitButton'
-import { CaseFilePanel } from './CaseFilePanel'
-import { PhaseInstructions } from '@/components/tutorial/PhaseInstructions'
 import { useGameStore } from '@/stores/gameStore'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
@@ -70,8 +67,6 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
   const [isSubmittingAction, setIsSubmittingAction] = useState(false)
   const [verdict, setVerdict] = useState<any>(null)
   const [juryDeliberating, setJuryDeliberating] = useState(false)
-  const [showCaseFile, setShowCaseFile] = useState(false)
-  const caseFileShownRef = useRef(false) // Track if case file has been initially shown
   
   const loadGameData = useCallback(async () => {
     // Early return if required data is missing
@@ -451,30 +446,12 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
   // Load game data when component mounts or key dependencies change
   useEffect(() => {
     if (user?.id && currentGame?.id) {
-      caseFileShownRef.current = false // Reset case file shown status for new game
       loadGameData()
     } else if (user === null) {
       // User is confirmed null (not loading), set game as loaded
       setGameDataLoaded(true)
     }
   }, [loadGameData, user?.id, currentGame?.id])
-  
-  // CRITICAL UX: Auto-show case file when game loads to provide immediate context (ONLY ONCE)
-  useEffect(() => {
-    if (gameDataLoaded && selectedCase && !caseFileShownRef.current) {
-      // Small delay to let the UI settle, then show case file
-      const timer = setTimeout(() => {
-        setShowCaseFile(true)
-        caseFileShownRef.current = true // Mark as shown to prevent re-triggering
-        addNotification({
-          type: 'info',
-          message: '📋 Review the case file to understand what you\'re arguing!'
-        })
-      }, 1500)
-      
-      return () => clearTimeout(timer)
-    }
-  }, [gameDataLoaded, selectedCase, addNotification])
   
   // Subscribe to real-time game events
   useEffect(() => {
@@ -612,15 +589,6 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-gavel-blue via-gavel-blue-700 to-mahogany">
-      {/* Case File Panel - CRITICAL UX IMPROVEMENT */}
-      {selectedCase && (
-        <CaseFilePanel 
-          selectedCase={selectedCase}
-          isVisible={showCaseFile}
-          onClose={() => setShowCaseFile(false)}
-        />
-      )}
-      
       {/* Strategic Decision Advisor Modal */}
       <AnimatePresence>
         {showDecisionAdvisor && pendingDecision && (
@@ -634,27 +602,6 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
           />
         )}
       </AnimatePresence>
-      
-      {/* Quit Button - Fixed position overlay */}
-      <QuitButton 
-        onQuitToMenu={onGameEnd}
-        onRestartCase={() => {
-          // Restart current case - clear local state and reload
-          setAvailableEvidence([])
-          setPresentedEvidence([])
-          setCurrentArgument('')
-          setSelectedEvidence(null)
-          setUserCredibility(85)
-          setCaseStrength({ prosecution: 50, defense: 50 })
-          setVerdict(null)
-          setCurrentPhase('opening_statements')
-          addNotification({
-            type: 'info',
-            message: 'Case restarted - starting fresh opening statements'
-          })
-        }}
-        gamePhase={currentPhase}
-      />
       
       <div className="p-4">
         {/* Header */}
@@ -678,16 +625,6 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {/* Case File Button - CRITICAL for player understanding */}
-                  <GavelButton
-                    variant="accent"
-                    onClick={() => setShowCaseFile(true)}
-                    className="flex items-center gap-2"
-                  >
-                    <FileText size={16} />
-                    Case File
-                  </GavelButton>
-                  
                   <motion.div 
                     className={`px-3 py-1 rounded-full text-sm font-medium ${
                       userCredibility >= 80 ? 'bg-green-500/20 text-green-400' :
@@ -707,13 +644,6 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
             </CourtroomCardHeader>
           </CourtroomCard>
         </div>
-        
-        {/* Phase Instructions - CRITICAL for guiding players */}
-        <PhaseInstructions 
-          currentPhase={currentPhase}
-          userRole={userRole || 'prosecutor'}
-          isVisible={true}
-        />
         
         {/* Main Content Grid */}
         <div className="grid grid-cols-12 gap-4">
@@ -740,27 +670,36 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
                 <div className="flex items-center justify-between">
                   <CourtroomCardTitle>Courtroom Actions</CourtroomCardTitle>
                   <div className="flex gap-2">
-                    <GavelButton
-                      variant={activeView === 'evidence' ? 'accent' : 'ghost'}
-                      size="sm"
+                    <button
                       onClick={() => setActiveView('evidence')}
+                      className={`px-3 py-1 rounded text-sm transition-colors ${
+                        activeView === 'evidence' 
+                          ? 'bg-verdict-gold text-gavel-blue' 
+                          : 'text-parchment/70 hover:text-parchment'
+                      }`}
                     >
                       Evidence
-                    </GavelButton>
-                    <GavelButton
-                      variant={activeView === 'witness' ? 'accent' : 'ghost'}
-                      size="sm"
+                    </button>
+                    <button
                       onClick={() => setActiveView('witness')}
+                      className={`px-3 py-1 rounded text-sm transition-colors ${
+                        activeView === 'witness' 
+                          ? 'bg-verdict-gold text-gavel-blue' 
+                          : 'text-parchment/70 hover:text-parchment'
+                      }`}
                     >
                       Witness
-                    </GavelButton>
-                    <GavelButton
-                      variant={activeView === 'strategy' ? 'accent' : 'ghost'}
-                      size="sm"
+                    </button>
+                    <button
                       onClick={() => setActiveView('strategy')}
+                      className={`px-3 py-1 rounded text-sm transition-colors ${
+                        activeView === 'strategy' 
+                          ? 'bg-verdict-gold text-gavel-blue' 
+                          : 'text-parchment/70 hover:text-parchment'
+                      }`}
                     >
                       Strategy
-                    </GavelButton>
+                    </button>
                   </div>
                 </div>
               </CourtroomCardHeader>
@@ -795,71 +734,50 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
                 {activeView === 'strategy' && (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
-                        <MessageSquare size={16} className="text-verdict-gold" />
-                        Submit Legal Argument
-                        <span className="text-xs text-parchment/60 font-normal">
-                          ({currentPhase === 'opening_statements' ? 'Opening Statement' : 
-                            currentPhase === 'closing_arguments' ? 'Closing Argument' : 
-                            'Legal Argument'})
-                        </span>
-                      </label>
+                      <label className="block text-sm font-medium mb-2">Submit Legal Argument</label>
                       <textarea
                         value={currentArgument}
                         onChange={(e) => setCurrentArgument(e.target.value)}
                         className="w-full p-3 bg-parchment/10 border border-parchment/30 rounded-lg text-parchment focus:ring-2 focus:ring-verdict-gold focus:border-verdict-gold"
                         rows={4}
-                        placeholder={
-                          currentPhase === 'opening_statements' 
-                            ? "Write your opening statement: 'Ladies and gentlemen of the jury, the evidence will show that...'" 
-                            : currentPhase === 'closing_arguments'
-                            ? "Summarize your case: 'The evidence clearly shows... Therefore, you must find...'" 
-                            : "Present your legal argument to the court..."
-                        }
+                        placeholder="Present your legal argument to the court..."
                       />
                       <div className="flex justify-between items-center mt-2">
                         <span className="text-xs text-parchment/60">
-                          💬 Arguments are evaluated for legal merit and strategic impact
+                          Arguments are evaluated for legal merit and strategic impact
                         </span>
                         <GavelButton 
                           onClick={handleArgumentSubmit}
                           disabled={!currentArgument.trim() || isSubmittingAction}
                           size="sm"
                         >
-                          Submit {currentPhase === 'opening_statements' ? 'Opening' : 
-                                  currentPhase === 'closing_arguments' ? 'Closing' : 'Argument'}
+                          Submit Argument
                         </GavelButton>
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-3 gap-2">
-                      <GavelButton
-                        variant="destructive"
-                        size="sm"
+                      <button
                         onClick={() => handleObjection('relevance', 'This evidence is not relevant to the case at hand')}
+                        className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
                         disabled={isSubmittingAction}
-                        className="text-xs"
                       >
                         Object: Relevance
-                      </GavelButton>
-                      <GavelButton
-                        variant="destructive"
-                        size="sm"
+                      </button>
+                      <button
                         onClick={() => handleObjection('hearsay', 'This statement constitutes inadmissible hearsay')}
+                        className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
                         disabled={isSubmittingAction}
-                        className="text-xs"
                       >
                         Object: Hearsay
-                      </GavelButton>
-                      <GavelButton
-                        variant="destructive"
-                        size="sm"
+                      </button>
+                      <button
                         onClick={() => handleObjection('foundation', 'Insufficient foundation has been laid for this evidence')}
+                        className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
                         disabled={isSubmittingAction}
-                        className="text-xs"
                       >
                         Object: Foundation
-                      </GavelButton>
+                      </button>
                     </div>
                   </div>
                 )}

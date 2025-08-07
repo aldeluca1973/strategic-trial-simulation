@@ -81,18 +81,7 @@ export function ConfirmationPage() {
   }
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4">
-      {/* Courtroom Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/courtroom-background.jpg)',
-        }}
-      />
-      
-      {/* Dark Overlay for Better Text Readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gavel-blue/80 via-gavel-blue-700/85 to-mahogany/80" />
-      
+    <div className="min-h-screen bg-gradient-to-br from-gavel-blue via-gavel-blue-700 to-mahogany flex items-center justify-center p-4">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-20 animate-pulse-gentle">

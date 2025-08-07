@@ -15,47 +15,6 @@
         "testimony": "The main witnesses were the two parties to the contract, Lucy and Zehmer. Zehmer's wife also testified that she did not believe the contract was serious."
       }
     ],
-    "witnesses": [
-      {
-        "id": "lucy",
-        "name": "W.O. Lucy",
-        "role": "Plaintiff",
-        "background": "Farmer who believed he was making a serious land purchase",
-        "key_facts": [
-          "Wanted to buy Zehmer's farm",
-          "Paid money and received signed agreement",
-          "Believed deal was serious"
-        ],
-        "credibility": 80,
-        "bias": "Has financial interest in enforcing the contract"
-      },
-      {
-        "id": "zehmer",
-        "name": "A.H. Zehmer",
-        "role": "Defendant",
-        "background": "Land owner who claims he was joking",
-        "key_facts": [
-          "Signed agreement while drinking",
-          "Claims it was a joke",
-          "Owns the disputed farm"
-        ],
-        "credibility": 60,
-        "bias": "Doesn't want to sell his farm"
-      },
-      {
-        "id": "mrs_zehmer",
-        "name": "Mrs. Zehmer",
-        "role": "Witness",
-        "background": "Zehmer's wife who was present during the incident",
-        "key_facts": [
-          "Was present during signing",
-          "Believed it was a joke",
-          "Also signed the agreement"
-        ],
-        "credibility": 70,
-        "bias": "Supports her husband's position"
-      }
-    ],
     "legal_arguments": {
       "general": "The main legal argument was whether a contract can be enforced if one of the parties was joking. The court held that the objective actions of the parties are what matter, not their subjective intentions."
     },
@@ -66,62 +25,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/contracts-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 3,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "witness_examination",
-        "trigger": "credibility_attack",
-        "description": "Challenge A.H. Zehmer's credibility",
-        "points_multiplier": 2.0,
-        "drama_level": "high"
-      },
-      {
-        "phase": "witness_examination",
-        "trigger": "bias_objection",
-        "description": "Object to W.O. Lucy's biased testimony",
-        "points_multiplier": 1.8,
-        "drama_level": "high"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      },
-      {
-        "phase": "legal_arguments",
-        "trigger": "contract_interpretation",
-        "description": "Masterfully interpret contract language",
-        "points_multiplier": 1.7,
-        "drama_level": "medium"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 3
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "7b2425f8-bf75-445e-8fe3-26d0d9a49ab2",
@@ -139,47 +43,6 @@
         "testimony": "The main witnesses were the plaintiff, John Leonard, and representatives from PepsiCo."
       }
     ],
-    "witnesses": [
-      {
-        "id": "leonard",
-        "name": "John Leonard",
-        "role": "Plaintiff",
-        "background": "College student who collected Pepsi points",
-        "key_facts": [
-          "Collected 7 million Pepsi points",
-          "Attempted to claim Harrier jet",
-          "Believed commercial was serious offer"
-        ],
-        "credibility": 75,
-        "bias": "Wants to win the case and get the jet"
-      },
-      {
-        "id": "pepsi_exec",
-        "name": "PepsiCo Executive",
-        "role": "Corporate Representative",
-        "background": "Marketing executive involved in the campaign",
-        "key_facts": [
-          "Designed promotional campaign",
-          "Never intended to sell actual jets",
-          "Commercial was meant as humor"
-        ],
-        "credibility": 85,
-        "bias": "Represents corporate interests"
-      },
-      {
-        "id": "marketing_expert",
-        "name": "Dr. Sarah Mitchell",
-        "role": "Marketing Expert",
-        "background": "Professor of advertising law and marketing practices",
-        "key_facts": [
-          "Expert in advertising standards",
-          "Can explain industry practices",
-          "Objective third party"
-        ],
-        "credibility": 95,
-        "bias": "None - expert witness"
-      }
-    ],
     "legal_arguments": {
       "general": "The main legal argument was whether the Pepsi commercial constituted an offer. The court held that it did not, as no reasonable person would have believed that Pepsi was seriously offering a Harrier jet for sale."
     },
@@ -190,62 +53,14 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/contracts-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 3,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "witness_examination",
-        "trigger": "credibility_attack",
-        "description": "Challenge John Leonard's credibility",
-        "points_multiplier": 2.0,
-        "drama_level": "high"
-      },
-      {
-        "phase": "witness_examination",
-        "trigger": "bias_objection",
-        "description": "Object to John Leonard's biased testimony",
-        "points_multiplier": 1.8,
-        "drama_level": "high"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 3
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "7bc682c3-e3a2-4b07-8243-e4f79cd20dec",
     "case_name": "Gleason v. Freeman",
     "year": 2008,
     "location": "Tennessee",
-    "case_background": "Whether a binding contract exists depends on the objective expressions of intent to be bound and the definitiveness of the terms of the agreement. When a party\u2019s words create doubt as to their intent to be bound, a court will consider the situation and conduct of the parties under the circumstances. Continuing to negotiate an agreement\u2019s terms may be evidence that the parties did not intend to be bound.",
+    "case_background": "Whether a binding contract exists depends on the objective expressions of intent to be bound and the definitiveness of the terms of the agreement. When a party’s words create doubt as to their intent to be bound, a court will consider the situation and conduct of the parties under the circumstances. Continuing to negotiate an agreement’s terms may be evidence that the parties did not intend to be bound.",
     "key_evidence": [
       {
         "description": "The key evidence was a series of emails and other communications between the parties. The plaintiff argued that these communications constituted a binding contract, but the court found that the parties were still in the process of negotiating."
@@ -266,48 +81,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/contracts-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      },
-      {
-        "phase": "legal_arguments",
-        "trigger": "contract_interpretation",
-        "description": "Masterfully interpret contract language",
-        "points_multiplier": 1.7,
-        "drama_level": "medium"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "35f07a9a-9b56-4a98-bded-d102d61b77d1",
@@ -335,48 +109,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/contracts-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      },
-      {
-        "phase": "legal_arguments",
-        "trigger": "contract_interpretation",
-        "description": "Masterfully interpret contract language",
-        "points_multiplier": 1.7,
-        "drama_level": "medium"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "b182888c-340f-4594-8976-5b9edf8006a4",
@@ -404,48 +137,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/contracts-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      },
-      {
-        "phase": "legal_arguments",
-        "trigger": "contract_interpretation",
-        "description": "Masterfully interpret contract language",
-        "points_multiplier": 1.7,
-        "drama_level": "medium"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "a4fe4cf0-0999-4ee6-b185-b299ade34c1d",
@@ -473,41 +165,7 @@
     "source_url": "https://medicalmalpracticeopinions.justia.com/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "f261bfb2-4537-403c-8f67-ded2254a556c",
@@ -535,41 +193,7 @@
     "source_url": "https://medicalmalpracticeopinions.justia.com/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 2,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 4,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "9e37b6dc-dabc-4c25-afed-75d815c55a5b",
@@ -597,41 +221,7 @@
     "source_url": "https://medicalmalpracticeopinions.justia.com/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 2,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 4,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "6e528d52-e8b3-474b-bd0e-e64a70fd86dd",
@@ -659,41 +249,7 @@
     "source_url": "https://medicalmalpracticeopinions.justia.com/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 2,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 4,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "fc64c174-c9b7-4966-b6e7-d11ba6f22cfe",
@@ -721,41 +277,7 @@
     "source_url": "https://medicalmalpracticeopinions.justia.com/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 2,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 4,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "1997d92e-8968-4804-ae83-4c7d9af12d9b",
@@ -783,48 +305,7 @@
     "source_url": "https://supreme.justia.com/cases/federal/us/346/156/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "smoking_gun",
-        "description": "Present the crucial piece of evidence",
-        "points_multiplier": 3.0,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "2d11a8a4-a915-4c59-a9f1-3bf927a1a3fd",
@@ -852,48 +333,7 @@
     "source_url": "https://supreme.justia.com/cases/federal/us/160/469/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "smoking_gun",
-        "description": "Present the crucial piece of evidence",
-        "points_multiplier": 3.0,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "0dfbd3dc-8e38-4839-8858-25cb8386380c",
@@ -921,41 +361,7 @@
     "source_url": "https://supreme.justia.com/cases/federal/us/109/3/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "55e96c89-6d8c-433a-88a2-4356b31ed391",
@@ -983,41 +389,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/intellectual-property-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "90edd78c-1ef9-4998-8dca-d5d900c3ca2c",
@@ -1045,41 +417,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/intellectual-property-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "b8265dac-a9b2-433f-a51d-4a3a749a2b16",
@@ -1107,41 +445,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/intellectual-property-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "d25313f0-c7ce-416b-9079-9bcfe78c1b8e",
@@ -1169,41 +473,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/intellectual-property-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "0585ee1c-8900-4ece-b7d6-febec5b67a2b",
@@ -1231,41 +501,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/intellectual-property-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "620500f7-8fe7-4041-9d47-0608dbbe5e8b",
@@ -1293,41 +529,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/environmental-law-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "2edf0531-0abe-46e7-a206-898611e97d3e",
@@ -1355,41 +557,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/environmental-law-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "d2772014-b32d-4de6-9e82-3b103e2db944",
@@ -1417,41 +585,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/environmental-law-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "e709c5a1-4938-43b5-8274-e09196df8ac4",
@@ -1479,41 +613,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/environmental-law-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "20199435-09c4-49e0-8c24-8ccab1c965f4",
@@ -1541,41 +641,7 @@
     "source_url": "https://www.justia.com/law-schools/justia-case-law-outlines/environmental-law-cases-outline/",
     "difficulty_level": 3,
     "case_category": "general",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 1,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 3,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "b1a2c3d4-e5f6-7890-1234-567890abcdef",
@@ -1628,41 +694,7 @@
     "source_url": null,
     "difficulty_level": 4,
     "case_category": "landmark",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 2,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 4,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   },
   {
     "id": "c2b3d4e5-f6a7-8901-2345-678901bcdefg",
@@ -1706,40 +738,6 @@
     "source_url": null,
     "difficulty_level": 5,
     "case_category": "landmark",
-    "is_active": true,
-    "difficulty_rating": 1,
-    "evidence_complexity": 2,
-    "witness_complexity": 1,
-    "key_moments": [
-      {
-        "phase": "opening_statements",
-        "trigger": "strong_opening",
-        "description": "Deliver a compelling opening statement",
-        "points_multiplier": 1.5,
-        "drama_level": "high"
-      },
-      {
-        "phase": "evidence_presentation",
-        "trigger": "evidence_chain",
-        "description": "Present evidence in logical sequence",
-        "points_multiplier": 1.3,
-        "drama_level": "medium"
-      },
-      {
-        "phase": "closing_arguments",
-        "trigger": "emotional_appeal",
-        "description": "Make a powerful emotional appeal to the jury",
-        "points_multiplier": 2.2,
-        "drama_level": "very_high"
-      }
-    ],
-    "scoring_modifiers": {
-      "base_points_multiplier": 1.0,
-      "time_pressure_bonus": true,
-      "evidence_bonus_threshold": 4,
-      "witness_bonus_threshold": 2
-    },
-    "quick_battle_suitable": true,
-    "estimated_duration_minutes": 7
+    "is_active": true
   }
 ]

@@ -23,7 +23,6 @@ export function useGameSession() {
     timeLimit?: number
     preferredRole?: string | null
     selectedCaseId?: string
-    preSelectedCase?: LegalCase | null
   } = {}) => {
     if (!user) {
       addNotification({ type: 'error', message: 'You must be logged in to create a game' })
@@ -41,8 +40,7 @@ export function useGameSession() {
             allowSpectators: settings.allowSpectators || false,
             timeLimit: settings.timeLimit || 300,
             preferredRole: settings.preferredRole,
-            selectedCaseId: settings.selectedCaseId,
-            preSelectedCase: settings.preSelectedCase
+            selectedCaseId: settings.selectedCaseId
           }
         }
       })
@@ -53,10 +51,7 @@ export function useGameSession() {
 
       const { gameSession, selectedCase } = response.data.data
       setCurrentGame(gameSession)
-      
-      // Use pre-selected case if provided, otherwise use the case from server
-      const caseToSet = settings.preSelectedCase || selectedCase
-      setSelectedCase(caseToSet)
+      setSelectedCase(selectedCase)
       
       addNotification({ 
         type: 'success', 

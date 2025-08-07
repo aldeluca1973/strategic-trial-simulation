@@ -84,12 +84,7 @@ export function EvidenceCard({
         className={`cursor-pointer transition-all duration-300 ${isLocked ? 'opacity-50 grayscale' : ''} ${
           isSelected ? 'ring-2 ring-verdict-gold shadow-lg shadow-verdict-gold/20' : ''
         } ${canCombine ? 'ring-2 ring-blue-400 shadow-blue-400/20' : ''}`}
-        onClick={() => {
-          if (!isLocked) {
-            // Single click now immediately presents evidence instead of just selecting
-            onPresent(evidence)
-          }
-        }}
+        onClick={() => !isLocked && onSelect(evidence)}
         draggable={!isLocked}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
@@ -166,40 +161,55 @@ export function EvidenceCard({
               )}
             </div>
             
-            {/* Simplified single-click interactions - Always show quick action buttons */}
-            {!isLocked && (
-              <div className="flex gap-1 text-xs mt-2">
-                <div className="flex-1 bg-verdict-gold/20 text-verdict-gold px-2 py-1 rounded text-center text-xs">
-                  Click to Present
-                </div>
-                
-                {canCombine && (
+            {/* Action buttons */}
+            <AnimatePresence>
+              {(isSelected || showDetails) && !isLocked && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="flex gap-1 text-xs"
+                >
                   <GavelButton
-                    variant="secondary"
+                    variant="accent"
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation()
-                      onCombine(evidence)
+                      onPresent(evidence)
                     }}
-                    className="text-xs py-1 px-2"
+                    className="flex-1 text-xs py-1"
                   >
-                    Combine
+                    Present
                   </GavelButton>
-                )}
-                
-                <GavelButton
-                  variant="ghost"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onExamine(evidence)
-                  }}
-                  className="text-xs py-1 px-1"
-                >
-                  📋
-                </GavelButton>
-              </div>
-            )}
+                  
+                  {canCombine && (
+                    <GavelButton
+                      variant="secondary"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onCombine(evidence)
+                      }}
+                      className="flex-1 text-xs py-1"
+                    >
+                      Combine
+                    </GavelButton>
+                  )}
+                  
+                  <GavelButton
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onExamine(evidence)
+                    }}
+                    className="text-xs py-1"
+                  >
+                    📋
+                  </GavelButton>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </CourtroomCardContent>
       </CourtroomCard>

@@ -1,12 +1,12 @@
 {
-  "name": "Virtual Gavel - Legal Game",
-  "short_name": "Virtual Gavel",
-  "description": "A stunning mobile-first legal game with courtroom strategy and AI jury",
+  "name": "Trial Simulation Game",
+  "short_name": "TrialSim",
+  "description": "An engaging multiplayer courtroom simulation game with AI jury",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A2240",
   "theme_color": "#D4AF37",
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/icon-192x192.jpg",
