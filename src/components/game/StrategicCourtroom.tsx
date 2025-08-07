@@ -686,6 +686,10 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-5xl mx-auto"
           >
+            {/* OBVIOUS TEST INDICATOR */}
+            <div className="mb-4 p-4 bg-red-500 text-white text-center text-xl font-bold rounded-lg">
+              🚨 NEW VERSION LOADED - START TRIAL FEATURE ACTIVE 🚨
+            </div>
             <div className="grid md:grid-cols-5 gap-6">
               {/* Case File */}
               <div className="md:col-span-3">
