@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Scale, Brain, Target, Shield, AlertTriangle, Clock, Gavel, MessageSquare, FileText, Users } from 'lucide-react'
+import { Scale, Brain, Target, Shield, AlertTriangle, Clock, Gavel, MessageSquare, FileText, Users, Info, Briefcase, Award, ArrowRight, BookOpen, LogOut } from 'lucide-react'
 import { GavelButton } from '@/components/ui/gavel-button'
 import { CourtroomCard, CourtroomCardContent, CourtroomCardHeader, CourtroomCardTitle } from '@/components/ui/courtroom-card'
 import { CaseStrengthMeter } from './strategy/CaseStrengthMeter'
@@ -8,6 +8,7 @@ import { CredibilityTracker } from './strategy/CredibilityTracker'
 import { CaseStrengthAnalyzer } from './strategy/CaseStrengthAnalyzer'
 import { StrategicDecisionAdvisor } from './strategy/StrategicDecisionAdvisor'
 import { EvidenceCard } from './evidence/EvidenceCard'
+import { EvidenceTimeline } from './evidence/EvidenceTimeline'
 import { WitnessExamination } from './witness/WitnessExamination'
 import { useGameStore } from '@/stores/gameStore'
 import { useAuth } from '@/hooks/useAuth'
@@ -37,7 +38,7 @@ interface EvidenceItem {
 }
 
 export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const {
     currentGame,
     participants,
@@ -57,6 +58,9 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
   const [userCredibility, setUserCredibility] = useState(85)
   const [caseStrength, setCaseStrength] = useState({ prosecution: 50, defense: 50 })
   
+  // Constants
+  const timeLimit = 1800 // 30 minutes in seconds
+  
   // Game state
   const [gameDataLoaded, setGameDataLoaded] = useState(false)
   const [availableEvidence, setAvailableEvidence] = useState<EvidenceItem[]>([])
@@ -67,6 +71,8 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
   const [isSubmittingAction, setIsSubmittingAction] = useState(false)
   const [verdict, setVerdict] = useState<any>(null)
   const [juryDeliberating, setJuryDeliberating] = useState(false)
+  const [trialStarted, setTrialStarted] = useState(false)
+  const [showCaseFile, setShowCaseFile] = useState(true)
   
   const loadGameData = useCallback(async () => {
     // Early return if required data is missing
@@ -412,6 +418,17 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
     })
   }
   
+  const startTrial = () => {
+    setTrialStarted(true)
+    setCurrentPhase('opening_statements')
+    setShowCaseFile(false)
+    setTimeRemaining(timeLimit || 1800) // 30 minutes default
+    addNotification({
+      type: 'success',
+      message: 'Trial has commenced! Present your case strategically.'
+    })
+  }
+
   const requestJuryDeliberation = async () => {
     if (!currentGame || !selectedCase) return
     
@@ -634,7 +651,24 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
                   >
                     Credibility: {userCredibility}/100
                   </motion.div>
-                  {userRole === 'judge' && currentPhase === 'closing_arguments' && (
+                  
+                  {/* Sign Out Button */}
+                  <GavelButton 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={async () => {
+                      const { error } = await signOut();
+                      if (!error) {
+                        window.location.href = '/';
+                      }
+                    }}
+                    className="text-parchment/70 hover:text-parchment"
+                  >
+                    <LogOut size={16} className="mr-1" />
+                    Sign Out
+                  </GavelButton>
+                  
+                  {trialStarted && userRole === 'judge' && currentPhase === 'closing_arguments' && (
                     <GavelButton onClick={requestJuryDeliberation} disabled={juryDeliberating}>
                       {juryDeliberating ? 'Jury Deliberating...' : 'Call for Verdict'}
                     </GavelButton>
@@ -645,155 +679,510 @@ export function StrategicCourtroom({ onGameEnd }: StrategicCourtroomProps) {
           </CourtroomCard>
         </div>
         
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-12 gap-4">
-          {/* Left Sidebar - Strategic Feedback */}
-          <div className="col-span-3 space-y-4">
-            <CaseStrengthMeter 
-              gameSessionId={currentGame?.id || ''}
-              userRole={userRole || ''}
-              userId={user?.id || ''}
-            />
-            
-            <CredibilityTracker 
-              gameSessionId={currentGame?.id || ''}
-              userId={user?.id || ''}
-              userRole={userRole || ''}
-            />
-          </div>
-          
-          {/* Main Courtroom Area */}
-          <div className="col-span-6 space-y-4">
-            {/* Action Area */}
-            <CourtroomCard>
-              <CourtroomCardHeader>
-                <div className="flex items-center justify-between">
-                  <CourtroomCardTitle>Courtroom Actions</CourtroomCardTitle>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setActiveView('evidence')}
-                      className={`px-3 py-1 rounded text-sm transition-colors ${
-                        activeView === 'evidence' 
-                          ? 'bg-verdict-gold text-gavel-blue' 
-                          : 'text-parchment/70 hover:text-parchment'
-                      }`}
-                    >
-                      Evidence
-                    </button>
-                    <button
-                      onClick={() => setActiveView('witness')}
-                      className={`px-3 py-1 rounded text-sm transition-colors ${
-                        activeView === 'witness' 
-                          ? 'bg-verdict-gold text-gavel-blue' 
-                          : 'text-parchment/70 hover:text-parchment'
-                      }`}
-                    >
-                      Witness
-                    </button>
-                    <button
-                      onClick={() => setActiveView('strategy')}
-                      className={`px-3 py-1 rounded text-sm transition-colors ${
-                        activeView === 'strategy' 
-                          ? 'bg-verdict-gold text-gavel-blue' 
-                          : 'text-parchment/70 hover:text-parchment'
-                      }`}
-                    >
-                      Strategy
-                    </button>
-                  </div>
-                </div>
-              </CourtroomCardHeader>
-              <CourtroomCardContent>
-                {activeView === 'evidence' && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-3">
-                      {availableEvidence.slice(0, 6).map((evidence) => (
-                        <EvidenceCard
-                          key={evidence.id}
-                          evidence={evidence}
-                          isSelected={selectedEvidence?.id === evidence.id}
-                          isLocked={false}
-                          canCombine={false}
-                          onSelect={(ev) => setSelectedEvidence(ev)}
-                          onPresent={() => handleEvidencePresent(evidence)}
-                          onCombine={() => handleEvidencePresent(evidence)}
-                          onExamine={() => {}}
-                        />
-                      ))}
+        {/* Trial Start Screen or Main Game Interface */}
+        {!trialStarted ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-5xl mx-auto"
+          >
+            <div className="grid md:grid-cols-5 gap-6">
+              {/* Case File */}
+              <div className="md:col-span-3">
+                <CourtroomCard className="h-full">
+                  <CourtroomCardHeader>
+                    <div className="flex items-center gap-3">
+                      <Briefcase size={24} className="text-verdict-gold" />
+                      <CourtroomCardTitle>Case File: {selectedCase?.case_name}</CourtroomCardTitle>
                     </div>
-                  </div>
-                )}
-                
-                {activeView === 'witness' && (
-                  <div className="text-center py-8 text-parchment/60">
-                    <Users size={48} className="mx-auto mb-4" />
-                    <p>Witness examination system will be available in this phase</p>
-                  </div>
-                )}
-                
-                {activeView === 'strategy' && (
-                  <div className="space-y-4">
+                  </CourtroomCardHeader>
+                  <CourtroomCardContent className="space-y-6">
+                    {/* Case Overview */}
                     <div>
-                      <label className="block text-sm font-medium mb-2">Submit Legal Argument</label>
-                      <textarea
-                        value={currentArgument}
-                        onChange={(e) => setCurrentArgument(e.target.value)}
-                        className="w-full p-3 bg-parchment/10 border border-parchment/30 rounded-lg text-parchment focus:ring-2 focus:ring-verdict-gold focus:border-verdict-gold"
-                        rows={4}
-                        placeholder="Present your legal argument to the court..."
-                      />
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-xs text-parchment/60">
-                          Arguments are evaluated for legal merit and strategic impact
-                        </span>
-                        <GavelButton 
-                          onClick={handleArgumentSubmit}
-                          disabled={!currentArgument.trim() || isSubmittingAction}
-                          size="sm"
-                        >
-                          Submit Argument
-                        </GavelButton>
+                      <h3 className="font-semibold text-verdict-gold flex items-center gap-2 mb-3">
+                        <Info size={16} /> Case Overview
+                      </h3>
+                      <p className="text-parchment/90 leading-relaxed mb-3">
+                        {selectedCase?.case_summary || "A complex legal case requiring strategic thinking and careful evidence presentation."}
+                      </p>
+                      
+                      <div className="grid grid-cols-2 gap-4 mt-4">
+                        <div className="bg-parchment/5 p-3 rounded-lg border border-parchment/20">
+                          <h4 className="text-verdict-gold text-sm font-medium mb-1">Prosecution Objective</h4>
+                          <p className="text-xs text-parchment/80">
+                            {selectedCase?.prosecution_objective || "Prove the defendant's guilt beyond reasonable doubt through strategic evidence presentation."}
+                          </p>
+                        </div>
+                        <div className="bg-parchment/5 p-3 rounded-lg border border-parchment/20">
+                          <h4 className="text-verdict-gold text-sm font-medium mb-1">Defense Objective</h4>
+                          <p className="text-xs text-parchment/80">
+                            {selectedCase?.defense_objective || "Establish reasonable doubt and protect the defendant's rights through careful cross-examination."}
+                          </p>
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-2">
-                      <button
-                        onClick={() => handleObjection('relevance', 'This evidence is not relevant to the case at hand')}
-                        className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
-                        disabled={isSubmittingAction}
+                    {/* Evidence Preview */}
+                    <div>
+                      <h3 className="font-semibold text-verdict-gold flex items-center gap-2 mb-3">
+                        <FileText size={16} /> Available Evidence 
+                        <span className="text-xs bg-verdict-gold/20 px-2 py-0.5 rounded-full">
+                          {availableEvidence.length} items
+                        </span>
+                      </h3>
+                      
+                      <div className="grid grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-2">
+                        {availableEvidence.slice(0, 4).map((evidence) => (
+                          <div key={evidence.id} className="p-3 bg-parchment/5 border border-parchment/20 rounded-lg">
+                            <h4 className="text-verdict-gold text-sm font-medium mb-1">{evidence.evidence_name}</h4>
+                            <div className="flex items-center gap-2 text-xs text-parchment/70 mb-2">
+                              <span className="capitalize">{evidence.evidence_type}</span>
+                              <span className="w-1.5 h-1.5 bg-verdict-gold/50 rounded-full"></span>
+                              <span>Impact: {evidence.impact_strength}/10</span>
+                            </div>
+                            <p className="text-xs text-parchment/80 line-clamp-2">
+                              {evidence.description}
+                            </p>
+                          </div>
+                        ))}
+                        {availableEvidence.length > 4 && (
+                          <div className="flex items-center justify-center p-3 bg-parchment/5 border border-dashed border-parchment/20 rounded-lg">
+                            <span className="text-sm text-parchment/60">
+                              +{availableEvidence.length - 4} more evidence items
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Legal Strategy Tips */}
+                    <div>
+                      <h3 className="font-semibold text-verdict-gold flex items-center gap-2 mb-3">
+                        <Brain size={16} /> Strategic Tips
+                      </h3>
+                      <ul className="space-y-2 text-sm text-parchment/80">
+                        <li className="flex items-start gap-2">
+                          <div className="min-w-[20px] mt-1">
+                            <Award size={16} className="text-verdict-gold" />
+                          </div>
+                          <span>Present your strongest evidence early to establish credibility with the jury</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="min-w-[20px] mt-1">
+                            <Award size={16} className="text-verdict-gold" />
+                          </div>
+                          <span>Object only when you have a strong legal basis - excessive objections reduce credibility</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="min-w-[20px] mt-1">
+                            <Award size={16} className="text-verdict-gold" />
+                          </div>
+                          <span>Connect evidence pieces strategically to build a compelling narrative</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </CourtroomCardContent>
+                </CourtroomCard>
+              </div>
+              
+              {/* Trial Control Panel */}
+              <div className="md:col-span-2">
+                <CourtroomCard className="h-full">
+                  <CourtroomCardHeader>
+                    <div className="flex items-center gap-3">
+                      <Gavel size={24} className="text-verdict-gold" />
+                      <CourtroomCardTitle>Trial Controls</CourtroomCardTitle>
+                    </div>
+                  </CourtroomCardHeader>
+                  <CourtroomCardContent className="flex flex-col h-full justify-between">
+                    <div className="space-y-6">
+                      {/* Role Information */}
+                      <div>
+                        <h3 className="font-semibold text-verdict-gold flex items-center gap-2 mb-3">
+                          <BookOpen size={16} /> Your Role: <span className="capitalize">{userRole}</span>
+                        </h3>
+                        <p className="text-sm text-parchment/80 mb-4">
+                          {userRole === 'prosecutor' && "As the prosecutor, your job is to present compelling evidence and arguments to prove the defendant's guilt beyond reasonable doubt."}
+                          {userRole === 'defense' && "As the defense attorney, your role is to protect your client's rights and create reasonable doubt about their guilt through strategic advocacy."}
+                          {userRole === 'judge' && "As the judge, you'll oversee the proceedings, rule on objections, and ensure a fair trial for all parties involved."}
+                        </p>
+                      </div>
+                      
+                      {/* Trial Phases */}
+                      <div>
+                        <h3 className="font-semibold text-verdict-gold flex items-center gap-2 mb-3">
+                          <ArrowRight size={16} /> Trial Phases
+                        </h3>
+                        <div className="space-y-2">
+                          {[
+                            { phase: 'opening_statements', label: 'Opening Statements', description: 'Introduce your case theory to the jury' },
+                            { phase: 'evidence_presentation', label: 'Evidence Presentation', description: 'Present physical evidence to support your case' },
+                            { phase: 'witness_examination', label: 'Witness Examination', description: 'Question witnesses through direct and cross examination' },
+                            { phase: 'closing_arguments', label: 'Closing Arguments', description: 'Summarize your strongest points and request a verdict' },
+                            { phase: 'deliberation', label: 'Jury Deliberation', description: 'The AI jury evaluates all evidence and arguments' },
+                            { phase: 'verdict', label: 'Verdict', description: 'The final decision is announced' },
+                          ].map((item, index) => (
+                            <div 
+                              key={item.phase}
+                              className={`flex items-center gap-2 p-2 rounded-lg ${
+                                currentPhase === item.phase 
+                                  ? 'bg-verdict-gold/30 border border-verdict-gold/50' 
+                                  : 'bg-parchment/5 border border-parchment/20'
+                              }`}
+                            >
+                              <div className={`w-6 h-6 flex items-center justify-center rounded-full ${
+                                currentPhase === item.phase
+                                  ? 'bg-verdict-gold text-gavel-blue'
+                                  : 'bg-parchment/10 text-parchment/60'
+                              }`}>
+                                {index + 1}
+                              </div>
+                              <div>
+                                <div className="text-sm font-medium text-verdict-gold">{item.label}</div>
+                                <div className="text-xs text-parchment/70">{item.description}</div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Start Trial Button */}
+                    <div className="pt-6">
+                      <GavelButton 
+                        onClick={startTrial} 
+                        className="w-full py-4 text-lg"
                       >
-                        Object: Relevance
+                        <Gavel className="mr-2" />
+                        Begin Trial Proceedings
+                      </GavelButton>
+                      <div className="flex justify-between items-center mt-4">
+                        <GavelButton 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={onGameEnd}
+                        >
+                          Return to Lobby
+                        </GavelButton>
+                        <GavelButton 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={async () => {
+                            const { error } = await signOut();
+                            if (!error) {
+                              window.location.href = '/';
+                            }
+                          }}
+                        >
+                          <LogOut size={16} className="mr-1" />
+                          Sign Out
+                        </GavelButton>
+                      </div>
+                      <p className="text-center text-parchment/60 text-xs mt-2">
+                        Trial will begin with opening statements phase
+                      </p>
+                    </div>
+                  </CourtroomCardContent>
+                </CourtroomCard>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          /* Main Game Interface - When Trial Has Started */
+          <div className="grid grid-cols-12 gap-4">
+            {/* Left Sidebar - Strategic Feedback */}
+            <div className="col-span-3 space-y-4">
+              <CaseStrengthMeter 
+                gameSessionId={currentGame?.id || ''}
+                userRole={userRole || ''}
+                userId={user?.id || ''}
+              />
+              
+              <CredibilityTracker 
+                gameSessionId={currentGame?.id || ''}
+                userId={user?.id || ''}
+                userRole={userRole || ''}
+              />
+              
+              {/* Case File Toggle Button */}
+              <CourtroomCard>
+                <CourtroomCardContent>
+                  <GavelButton
+                    variant={showCaseFile ? "accent" : "primary"}
+                    onClick={() => setShowCaseFile(!showCaseFile)}
+                    className="w-full"
+                  >
+                    <Briefcase size={16} className="mr-2" />
+                    {showCaseFile ? "Hide Case File" : "Show Case File"}
+                  </GavelButton>
+                </CourtroomCardContent>
+              </CourtroomCard>
+            </div>
+            
+            {/* Main Courtroom Area */}
+            <div className="col-span-6 space-y-4">
+              {/* Case File (Collapsible) */}
+              <AnimatePresence>
+                {showCaseFile && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <CourtroomCard>
+                      <CourtroomCardHeader>
+                        <div className="flex items-center gap-3">
+                          <Briefcase size={20} className="text-verdict-gold" />
+                          <CourtroomCardTitle>Case File: {selectedCase?.case_name}</CourtroomCardTitle>
+                        </div>
+                      </CourtroomCardHeader>
+                      <CourtroomCardContent className="max-h-60 overflow-y-auto">
+                        <div className="space-y-4">
+                          <p className="text-parchment/90">
+                            {selectedCase?.case_summary || "A complex legal case requiring strategic thinking and careful evidence presentation."}
+                          </p>
+                          
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="bg-parchment/5 p-3 rounded-lg border border-parchment/20">
+                              <h4 className="text-verdict-gold text-sm font-medium mb-1">Prosecution</h4>
+                              <p className="text-xs text-parchment/80">
+                                {selectedCase?.prosecution_objective || "Prove guilt beyond reasonable doubt."}
+                              </p>
+                            </div>
+                            <div className="bg-parchment/5 p-3 rounded-lg border border-parchment/20">
+                              <h4 className="text-verdict-gold text-sm font-medium mb-1">Defense</h4>
+                              <p className="text-xs text-parchment/80">
+                                {selectedCase?.defense_objective || "Establish reasonable doubt."}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-parchment/5 p-3 rounded-lg border border-parchment/20">
+                            <h4 className="text-verdict-gold text-sm font-medium mb-1">Legal Standards</h4>
+                            <p className="text-xs text-parchment/80">
+                              {selectedCase?.legal_standards || "The prosecution must prove its case beyond a reasonable doubt. The defense must only create reasonable doubt about the defendant's guilt."}
+                            </p>
+                          </div>
+                        </div>
+                      </CourtroomCardContent>
+                    </CourtroomCard>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              {/* Action Area */}
+              <CourtroomCard>
+                <CourtroomCardHeader>
+                  <div className="flex items-center justify-between">
+                    <CourtroomCardTitle>Courtroom Actions</CourtroomCardTitle>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setActiveView('evidence')}
+                        className={`px-3 py-1 rounded text-sm transition-colors ${
+                          activeView === 'evidence' 
+                            ? 'bg-verdict-gold text-gavel-blue' 
+                            : 'text-parchment/70 hover:text-parchment'
+                        }`}
+                      >
+                        Evidence
                       </button>
                       <button
-                        onClick={() => handleObjection('hearsay', 'This statement constitutes inadmissible hearsay')}
-                        className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
-                        disabled={isSubmittingAction}
+                        onClick={() => setActiveView('witness')}
+                        className={`px-3 py-1 rounded text-sm transition-colors ${
+                          activeView === 'witness' 
+                            ? 'bg-verdict-gold text-gavel-blue' 
+                            : 'text-parchment/70 hover:text-parchment'
+                        }`}
                       >
-                        Object: Hearsay
+                        Witness
                       </button>
                       <button
-                        onClick={() => handleObjection('foundation', 'Insufficient foundation has been laid for this evidence')}
-                        className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
-                        disabled={isSubmittingAction}
+                        onClick={() => setActiveView('strategy')}
+                        className={`px-3 py-1 rounded text-sm transition-colors ${
+                          activeView === 'strategy' 
+                            ? 'bg-verdict-gold text-gavel-blue' 
+                            : 'text-parchment/70 hover:text-parchment'
+                        }`}
                       >
-                        Object: Foundation
+                        Strategy
                       </button>
                     </div>
                   </div>
-                )}
-              </CourtroomCardContent>
-            </CourtroomCard>
+                </CourtroomCardHeader>
+                <CourtroomCardContent>
+                  {activeView === 'evidence' && (
+                    <div className="space-y-4">
+                      {/* Evidence Timeline - New Feature */}
+                      <div className="mb-4 p-3 bg-parchment/5 border border-parchment/20 rounded-lg">
+                        <h3 className="text-sm font-medium text-verdict-gold mb-2 flex items-center gap-2">
+                          <Clock size={16} />
+                          Evidence Timeline
+                        </h3>
+                        {presentedEvidence.length > 0 ? (
+                          <div className="space-y-2">
+                            {presentedEvidence.map((evidence, index) => (
+                              <div key={index} className="flex items-center gap-2 text-xs">
+                                <div className="w-5 h-5 flex items-center justify-center bg-verdict-gold/20 rounded-full text-verdict-gold">
+                                  {index + 1}
+                                </div>
+                                <span className="text-parchment">{evidence.evidence_name}</span>
+                                <span className="text-parchment/50 ml-auto">
+                                  Presented by <span className="capitalize">{evidence.presented_by}</span>
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-xs text-parchment/60">
+                            No evidence has been presented yet. Present evidence to build your case.
+                          </p>
+                        )}
+                      </div>
+                      
+                      {/* Available Evidence */}
+                      <div className="grid grid-cols-2 gap-3">
+                        {availableEvidence.slice(0, 6).map((evidence) => (
+                          <EvidenceCard
+                            key={evidence.id}
+                            evidence={evidence}
+                            isSelected={selectedEvidence?.id === evidence.id}
+                            isLocked={false}
+                            canCombine={false}
+                            onSelect={(ev) => setSelectedEvidence(ev)}
+                            onPresent={() => handleEvidencePresent(evidence)}
+                            onCombine={() => handleEvidencePresent(evidence)}
+                            onExamine={() => {}}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {activeView === 'witness' && (
+                    <div className="text-center py-8 text-parchment/60">
+                      <Users size={48} className="mx-auto mb-4" />
+                      <p>Witness examination system will be available in this phase</p>
+                    </div>
+                  )}
+                  
+                  {activeView === 'strategy' && (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Submit Legal Argument</label>
+                        <textarea
+                          value={currentArgument}
+                          onChange={(e) => setCurrentArgument(e.target.value)}
+                          className="w-full p-3 bg-parchment/10 border border-parchment/30 rounded-lg text-parchment focus:ring-2 focus:ring-verdict-gold focus:border-verdict-gold"
+                          rows={4}
+                          placeholder="Present your legal argument to the court..."
+                        />
+                        <div className="flex justify-between items-center mt-2">
+                          <span className="text-xs text-parchment/60">
+                            Arguments are evaluated for legal merit and strategic impact
+                          </span>
+                          <GavelButton 
+                            onClick={handleArgumentSubmit}
+                            disabled={!currentArgument.trim() || isSubmittingAction}
+                            size="sm"
+                          >
+                            Submit Argument
+                          </GavelButton>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => handleObjection('relevance', 'This evidence is not relevant to the case at hand')}
+                          className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
+                          disabled={isSubmittingAction}
+                        >
+                          Object: Relevance
+                        </button>
+                        <button
+                          onClick={() => handleObjection('hearsay', 'This statement constitutes inadmissible hearsay')}
+                          className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
+                          disabled={isSubmittingAction}
+                        >
+                          Object: Hearsay
+                        </button>
+                        <button
+                          onClick={() => handleObjection('foundation', 'Insufficient foundation has been laid for this evidence')}
+                          className="p-2 bg-red-500/20 border border-red-500/50 rounded text-sm hover:bg-red-500/30 transition-colors"
+                          disabled={isSubmittingAction}
+                        >
+                          Object: Foundation
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </CourtroomCardContent>
+              </CourtroomCard>
+            </div>
+            
+            {/* Right Sidebar - Case Analysis */}
+            <div className="col-span-3 space-y-4">
+              <CaseStrengthAnalyzer 
+                gameSessionId={currentGame?.id || ''}
+                userRole={userRole || ''}
+                userId={user?.id || ''}
+              />
+              
+              {/* Phase Navigation */}
+              {userRole === 'judge' && (
+                <CourtroomCard>
+                  <CourtroomCardHeader>
+                    <CourtroomCardTitle className="flex items-center gap-2">
+                      <Gavel size={18} className="text-verdict-gold" />
+                      Trial Control
+                    </CourtroomCardTitle>
+                  </CourtroomCardHeader>
+                  <CourtroomCardContent>
+                    <div className="space-y-3">
+                      {currentPhase === 'closing_arguments' ? (
+                        <GavelButton
+                          variant="primary"
+                          onClick={requestJuryDeliberation}
+                          disabled={juryDeliberating}
+                          className="w-full"
+                        >
+                          {juryDeliberating ? 'Jury Deliberating...' : 'Call for Verdict'}
+                        </GavelButton>
+                      ) : (
+                        <GavelButton
+                          variant="primary"
+                          onClick={() => {
+                            // Advance to next phase logic
+                            const phases = ['opening_statements', 'evidence_presentation', 'witness_examination', 'closing_arguments'];
+                            const currentIndex = phases.indexOf(currentPhase);
+                            if (currentIndex < phases.length - 1) {
+                              setCurrentPhase(phases[currentIndex + 1]);
+                              addNotification({
+                                type: 'success',
+                                message: `Moving to ${phases[currentIndex + 1].replace('_', ' ')}`
+                              });
+                            }
+                          }}
+                          className="w-full"
+                        >
+                          Advance to Next Phase
+                        </GavelButton>
+                      )}
+                      
+                      <GavelButton
+                        variant="ghost"
+                        onClick={onGameEnd}
+                        className="w-full"
+                      >
+                        Exit Trial
+                      </GavelButton>
+                    </div>
+                  </CourtroomCardContent>
+                </CourtroomCard>
+              )}
+            </div>
           </div>
-          
-          {/* Right Sidebar - Case Analysis */}
-          <div className="col-span-3 space-y-4">
-            <CaseStrengthAnalyzer 
-              gameSessionId={currentGame?.id || ''}
-              userRole={userRole || ''}
-              userId={user?.id || ''}
-            />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )
